@@ -965,7 +965,7 @@ void HexEdit::resetCursor() {
 }
 
 void HexEdit::setSelection(qint64 start, qint64 size, bool set_visible,
-                           bool reset_pos_in_byte) {
+                           qint64 pos_in_byte) {
   if (start < 0 || dataBytesCount_ == 0) {
     start = 0;
   } else if (start >= dataBytesCount_) {
@@ -990,9 +990,7 @@ void HexEdit::setSelection(qint64 start, qint64 size, bool set_visible,
 
   selection_size_ = size;
   current_position_ = start;
-  if (reset_pos_in_byte) {
-    cursor_pos_in_byte_ = 0;
-  }
+  cursor_pos_in_byte_ = pos_in_byte;
   createChunkDialog_->setRange(selectionStart(), selectionEnd());
 
   if (set_visible) {
@@ -1115,7 +1113,7 @@ void HexEdit::processEditEvent(QKeyEvent* event) {
       setSelection(current_position_ + 1, 0);
     } else {
       setSelection(current_position_, 0, /*set_visible=*/false,
-                   /*reset_pos_in_byte=*/false);
+                   /*pos_in_byte=*/cursor_pos_in_byte_);
       resetCursor();
     }
     scrollToByte(current_position_, /*minimal_change=*/true);
