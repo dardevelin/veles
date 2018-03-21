@@ -16,6 +16,7 @@
  */
 
 #include "ui/disasm/row.h"
+#include <iostream>
 
 namespace veles {
 namespace ui {
@@ -41,13 +42,51 @@ Row::Row() {
 
 void Row::setIndent(int level) { text_->setIndent(level * 20); }
 
+template <typename T>
+T* to(TextRepr* ptr) {
+  return dynamic_cast<T*>(ptr);
+}
+
+template <typename T>
+bool is(TextRepr* ptr) {
+  return to<T>(ptr) != nullptr;
+}
+
 void Row::setEntry(const EntryChunkCollapsed* entry) {
   id_ = entry->chunk->id;
   address_->setText(
       QString("%1").arg(entry->chunk->addr_begin, 8, 16, QChar('0')));
   comment_->setText("; " + entry->chunk->comment);
+
   text_->setText(QString(entry->chunk->text_repr->string()));
+
+  QString str;
+  auto repr = entry->chunk->text_repr.get();
+  if (is<Sublist>(repr)) {
+    for (auto& chldPtr : to<Sublist>(repr)->children()) {
+      if (chldPtr != nullptr) {
+        if (is<Keyword>(chldPtr.get())) {
+          auto keyword = to<Keyword>(chldPtr.get());
+          if (keyword->keywordType() == KeywordType::REGISTER) {
+            str.append("<font color='green'>");
+            str.append(chldPtr->string());
+            str.append("</font>");
+          } else if (keyword->keywordType() == KeywordType::OPCODE) {
+            str.append("<font color=#1ABC9C>");
+            str.append(chldPtr->string());
+            str.append("</font>");
+          } else
+            str.append(chldPtr->string());
+
+        } else {
+          str.append(chldPtr->string());
+        }
+      }
+    }
+    text_->setText(str);
+  }
 }
+// reszta logiki todo
 
 void Row::setEntry(const EntryChunkBegin* entry) {
   id_ = entry->chunk->id;
