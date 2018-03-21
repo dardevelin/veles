@@ -15,9 +15,11 @@
  *
  */
 #pragma once
+/*
 
 #include <QObject>
 
+#include "include/ui/docks/tabwidget.h"
 #include "ui/docks/tabbar.h"
 
 namespace veles {
@@ -35,16 +37,17 @@ class NewTabBarEventFilter : public QObject {
 
  protected:
   bool eventFilter(QObject* watched, QEvent* event) Q_DECL_OVERRIDE;
-  virtual bool mouseMove(QTabBar* tab_bar, QMouseEvent* event);
-  virtual bool mouseButtonPress(QTabBar* tab_bar, QMouseEvent* event);
-  virtual bool mouseButtonRelease(QTabBar* tab_bar, QMouseEvent* event);
-  virtual bool mouseButtonDblClick(QTabBar* tab_bar, QMouseEvent* event);
+  virtual bool mouseMove(TabBar* tab_bar, QMouseEvent* event);
+  virtual bool mouseButtonPress(TabBar* tab_bar, QMouseEvent* event);
+  virtual bool mouseButtonRelease(TabBar* tab_bar, QMouseEvent* event);
+  virtual bool mouseButtonDblClick(TabBar* tab_bar, QMouseEvent* event);
 
-  TabBar* dragged_tab_bar_ = nullptr;
-  int dragged_tab_index_ = -1;
+  TabWidget * tab_widget = nullptr;
+  int tab_index_ = -1;
   QPoint drag_init_pos_;
   static const int k_drag_treshold_ = 5;
 };
+*/
 
 }  // namespace ui
 }  // namespace veles

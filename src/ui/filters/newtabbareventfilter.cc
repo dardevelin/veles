@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- */
+ *//*
+
 #include "ui/filters/newtabbareventfilter.h"
 
 #include <QApplication>
@@ -27,7 +28,11 @@ namespace ui {
 NewTabBarEventFilter::NewTabBarEventFilter(QObject* parent)
     : QObject(parent), drag_init_pos_(0, 0) {}
 
-void NewTabBarEventFilter::tabMoved(int /*from*/, int /*to*/) {
+void NewTabBarEventFilter::tabMoved(int */
+/*from*//*
+, int */
+/*to*//*
+) {
   if (dragged_tab_bar_ != nullptr) {
     dragged_tab_index_ = dragged_tab_bar_->currentIndex();
   }
@@ -38,7 +43,7 @@ void NewTabBarEventFilter::currentChanged(int index) {
       MainWindowWithDetachableDockWidgets::getParentMainWindow(sender());
   if (main_window != nullptr) {
     auto dock_widget = dynamic_cast<DockWidget*>(
-        main_window->tabToDockWidget(dynamic_cast<QTabBar*>(sender()), index));
+        main_window->tabToDockWidget(dynamic_cast<TabBar*>(sender()), index));
 
     if (dock_widget != nullptr) {
       MainWindowWithDetachableDockWidgets::setActiveDockWidget(dock_widget);
@@ -47,12 +52,12 @@ void NewTabBarEventFilter::currentChanged(int index) {
 }
 
 bool NewTabBarEventFilter::eventFilter(QObject* watched, QEvent* event) {
-  auto* tab_bar = dynamic_cast<QTabBar*>(watched);
+  auto* tab_bar = dynamic_cast<TabBar*>(watched);
   if (tab_bar == nullptr) {
     return false;
   }
 
-  connect(tab_bar, &QTabBar::currentChanged, this,
+  connect(tab_bar, &TabBar::currentChanged, this,
           &NewTabBarEventFilter::currentChanged, Qt::UniqueConnection);
 
   auto main_window =
@@ -62,7 +67,7 @@ bool NewTabBarEventFilter::eventFilter(QObject* watched, QEvent* event) {
     return false;
   }
 
-  connect(tab_bar, &QTabBar::tabMoved, this, &NewTabBarEventFilter::tabMoved,
+  connect(tab_bar, &TabBar::tabMoved, this, &NewTabBarEventFilter::tabMoved,
           Qt::UniqueConnection);
 
   if (event->type() != QEvent::MouseMove &&
@@ -89,13 +94,13 @@ bool NewTabBarEventFilter::eventFilter(QObject* watched, QEvent* event) {
   return false;
 }
 
-bool NewTabBarEventFilter::mouseMove(QTabBar* tab_bar, QMouseEvent* event) {
+bool NewTabBarEventFilter::mouseMove(TabBar* tab_bar, QMouseEvent* event) {
   if (dragged_tab_bar_ != nullptr) {
     bool horizontal_tabs =
-        dragged_tab_bar_->shape() == QTabBar::RoundedNorth ||
-            dragged_tab_bar_->shape() == QTabBar::RoundedSouth ||
-            dragged_tab_bar_->shape() == QTabBar::TriangularNorth ||
-            dragged_tab_bar_->shape() == QTabBar::TriangularSouth;
+        dragged_tab_bar_->shape() == TabBar::RoundedNorth ||
+            dragged_tab_bar_->shape() == TabBar::RoundedSouth ||
+            dragged_tab_bar_->shape() == TabBar::TriangularNorth ||
+            dragged_tab_bar_->shape() == TabBar::TriangularSouth;
 
     if ((horizontal_tabs ? (event->pos() - drag_init_pos_).y()
                          : (event->pos() - drag_init_pos_).x()) >
@@ -140,8 +145,7 @@ bool NewTabBarEventFilter::mouseButtonPress(TabBar* tab_bar, QMouseEvent* event)
   return false;
 }
 
-bool NewTabBarEventFilter::mouseButtonRelease(TabBar* tab_bar,
-                                           QMouseEvent* event) {
+bool NewTabBarEventFilter::mouseButtonRelease(TabBar* tab_bar, QMouseEvent* event) {
   if (event->button() == Qt::LeftButton) {
     dragged_tab_bar_ = nullptr;
     dragged_tab_index_ = -1;
@@ -164,7 +168,7 @@ bool NewTabBarEventFilter::mouseButtonRelease(TabBar* tab_bar,
   return false;
 }
 
-bool NewTabBarEventFilter::mouseButtonDblClick(QTabBar* tab_bar,
+bool NewTabBarEventFilter::mouseButtonDblClick(TabBar* tab_bar,
                                             QMouseEvent* event) {
   if (event->button() == Qt::LeftButton) {
     int tab_index = tab_bar->tabAt(event->pos());
@@ -187,3 +191,4 @@ bool NewTabBarEventFilter::mouseButtonDblClick(QTabBar* tab_bar,
 
 }  // namespace ui
 }  // namespace veles
+*/

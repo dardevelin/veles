@@ -1,3 +1,6 @@
+#include <iostream>
+#include <QPainter>
+
 #include "ui/docks/dock.h"
 
 namespace veles {
@@ -92,7 +95,6 @@ void Dock::setState(Dock::DockState state) {
   Dock::state = state;
   if (state == DockState::Empty and this -> parent() == nullptr) {
     this->close();
-    puts("Tab Emptied\n");
   }
   emit stateChanged(state);
 }
@@ -105,8 +107,48 @@ void Dock::setFromChild(Dock *child) {
   delete tabWidget;
   tabWidget = child -> tabWidget;
   connect(tabWidget, &TabWidget::emptied, this, [this](){this -> setState(DockState::Empty);});
+}
 
 
+void Dock::mousePressEvent(QMouseEvent *event) {
+  QWidget::mousePressEvent(event);
+  if (tabWidget -> tabBar() -> rect().contains(event -> pos())) {
+    puts("Dzień dobry");
+    dragged_tab_index = tabWidget -> tabBar() -> tabAt(event -> pos());
+    if (dragged_tab_index > -1) {
+      auto tab_title = tabWidget -> tabBar() -> tabText(dragged_tab_index);
+      dragger = new QLabel(tab_title, this, Qt::Window | Qt::FramelessWindowHint);
+      dragger -> hide();
+      drag_start = event -> globalPos();
+
+    }
+  }
+}
+
+void Dock::mouseMoveEvent(QMouseEvent *event) {
+  QWidget::mouseMoveEvent(event);
+  if (dragger) {
+    auto covered = event -> globalPos() - drag_start;
+    auto indicator = QPoint(std::abs(covered.x()), std::abs(covered.y())) - detach_boundary;
+    if (std::max(indicator.x(), indicator.y()) > 0 and !dragger -> isVisible()) {
+      dragger -> show();
+      dragged_tab_index = tabWidget -> currentIndex();
+      dragged_widget = tabWidget -> widget(dragged_tab_index);
+      tabWidget -> removeTab(dragged_tab_index);
+    }
+    dragger->move(event->globalPos());
+
+  }
+}
+void Dock::mouseReleaseEvent(QMouseEvent * event) {
+  QWidget::mouseReleaseEvent(event);
+  if (dragger) {
+    dragger->setParent(nullptr);
+    dragged_widget -> setParent(nullptr);
+    dragged_widget -> show();
+
+    delete dragger;
+  }
 }
 
 } //ui
