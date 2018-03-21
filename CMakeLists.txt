@@ -384,6 +384,7 @@ add_executable(main_ui
     ${INCLUDE_DIR}/ui/shortcutssettings.h
     ${INCLUDE_DIR}/ui/filters/activatedockeventfilter.h
     ${INCLUDE_DIR}/ui/filters/tabbareventfilter.h
+    ${INCLUDE_DIR}/ui/filters/newtabbareventfilter.h
     ${INCLUDE_DIR}/ui/mainwindowwithdetachabledockwidgets.h
     ${INCLUDE_DIR}/ui/velesapplication.h
     ${INCLUDE_DIR}/ui/docks/dock.h
@@ -416,6 +417,7 @@ add_executable(main_ui
     ${SRC_DIR}/ui/shortcutssettings.cc
     ${SRC_DIR}/ui/filters/activatedockeventfilter.cc
     ${SRC_DIR}/ui/filters/tabbareventfilter.cc
+    ${SRC_DIR}/ui/filters/newtabbareventfilter.cc
     ${SRC_DIR}/ui/mainwindowwithdetachabledockwidgets.cc
     ${SRC_DIR}/ui/docks/dock.cc
     ${SRC_DIR}/ui/docks/tabwidget.cc
